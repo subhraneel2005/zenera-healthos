@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Mermaid from "@/components/Mermaid";
 import {
   LuFileSearch,
   LuShieldCheck,
@@ -242,6 +243,63 @@ const additions = [
   ["Localization readiness", "String extraction / i18n hooks so Indian-language hospital interfaces can be added later without a rewrite."],
 ];
 
+/* ---------- mermaid diagrams ---------- */
+
+const architectureChart = `flowchart TD
+  U(("Hospital User")) --> A(("ZENERA HEALTHOS WEB APP"))
+  subgraph CORE["Core Platform"]
+    I["Identity / RBAC"]
+    P["Patient + Encounter"]
+    B["Billing Ledger"]
+    D["Documents"]
+    C["Claims"]
+    W["Workflows / Tasks"]
+    R["Revenue Analytics"]
+  end
+  A --> CORE
+  subgraph AI["Shared AI Layer"]
+    M1["1 · AI Bill Auditor"]
+    M2["2 · Insurance & TPA Copilot"]
+    M3["3 · AI Discharge Manager"]
+    M4["4 · Claim Risk Predictor"]
+    M5["5 · Denial / Query Intelligence"]
+    M6["6 · Revenue Reconciliation"]
+    M7["7 · Revenue Leakage Radar"]
+  end
+  A --> AI
+  A --> G(("Firebase + Google Cloud<br/>Firestore · Storage · Auth · Functions · App Check · Cloud Run"))
+  classDef layer fill:#fffdf5,stroke:#000,stroke-width:3px;
+  class U,A,G layer;`;
+
+const docPipelineChart = `flowchart TD
+  U["Upload"] --> V["Validate type + size + tenant"]
+  V --> S["Store original in Cloud Storage"]
+  S --> M["Create metadata in Firestore"]
+  M --> E["Cloud Run extraction service"]
+  E --> O["OCR / layout / structured fields"]
+  O --> VC{"Validation + confidence"}
+  VC -->|fail| RH["Retry / Human review"]
+  RH --> O
+  VC -->|pass| ID["Index chunks + metadata<br/>(tenant-scoped retrieval)"]
+  ID --> LK["Link to encounter / claim / policy / invoice"]
+  classDef step fill:#fffdf5,stroke:#000,stroke-width:3px;
+  class U,V,S,M,E,O,VC,RH,ID,LK step;`;
+
+const aiPipelineChart = `flowchart LR
+  IN(["INPUT"]) --> N["Normalize"]
+  N --> DV["Deterministic validation"]
+  DV --> RE["Retrieve tenant-scoped evidence"]
+  RE --> MI["Model inference"]
+  MI --> SV["Schema validation"]
+  SV --> EC["Evidence / consistency check"]
+  EC --> CT{"Confidence threshold"}
+  CT -->|below| HR(["Human Review Queue"])
+  CT -->|above| PF["Persist finding"]
+  HR --> PF
+  PF --> AE["Emit audit event"]
+  classDef stage fill:#fffdf5,stroke:#000,stroke-width:3px;
+  class IN,N,DV,RE,MI,SV,EC,CT,HR,PF,AE stage;`;
+
 /* ---------- page ---------- */
 
 export default function Home() {
@@ -424,29 +482,11 @@ export default function Home() {
 
         {/* ARCHITECTURE */}
         <Section id="arch" index="03" title="Product Architecture: One Platform, Seven Modules" icon={LuCpu}>
-          <div className="neo bg-white p-6">
-            <div className="grid gap-3 font-mono text-sm md:grid-cols-[auto_1fr]">
-              <span className="font-extrabold">Hospital user</span>
-              <span className="text-ink/50">↓</span>
-              <span className="font-extrabold">ZENERA HEALTHOS WEB APP</span>
-              <span className="grid gap-1 text-ink/80">
-                <span>→ Identity / RBAC</span>
-                <span>→ Patient + Encounter</span>
-                <span>→ Billing Ledger</span>
-                <span>→ Documents</span>
-                <span>→ Claims</span>
-                <span>→ Workflows / Tasks</span>
-                <span>→ Revenue Analytics</span>
-              </span>
-              <span className="font-extrabold text-tertiary">→ SHARED AI LAYER</span>
-              <span className="grid gap-1 text-ink/80">
-                {modules.map((m) => (
-                  <span key={m.n}>→ {m.name}</span>
-                ))}
-              </span>
-              <span className="font-extrabold">↓</span>
-              <span className="font-bold">Firebase + Google Cloud</span>
-            </div>
+          <div className="neo bg-white p-5">
+            <Mermaid
+              chart={architectureChart}
+              caption="Zenera HealthOS platform architecture: hospital user into the web app, core platform, shared AI layer with seven modules, and Firebase + Google Cloud."
+            />
           </div>
 
           <h3 className="mb-3 mt-8 text-xl font-extrabold">
@@ -757,14 +797,11 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
             ))}
           </div>
 
-          <div className="neo mt-4 bg-ink p-4 text-white">
-            <p className="font-mono text-xs font-bold uppercase text-primary">Standard pipeline</p>
-            <p className="mt-1 font-mono text-xs leading-relaxed">
-              INPUT → normalize → deterministic validation → retrieve evidence →
-              inference → schema validation → evidence/consistency check →
-              confidence threshold → HUMAN REVIEW if required → persist → emit
-              audit event
-            </p>
+          <div className="neo mt-4 bg-white p-5">
+            <Mermaid
+              chart={aiPipelineChart}
+              caption="Shared AI layer standard pipeline: normalize, validate, retrieve evidence, infer, validate, check, threshold, human review, persist, emit audit event."
+            />
           </div>
 
           <Suggest title="RAG storage suggestion (non-binding)">
@@ -782,15 +819,11 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
         {/* DOCUMENT INTELLIGENCE */}
         <Section id="docs" index="07" title="Document Intelligence Pipeline" icon={LuFileText}>
           <p className="mb-3 text-sm">Dhyuthi owns this; Naman + Subhraneel support AI reasoning.</p>
-          <div className="neo bg-white p-4 font-mono text-xs leading-relaxed">
-            <p>Upload</p>
-            <p className="pl-4">→ Validate type + size + tenant</p>
-            <p className="pl-4">→ Store original in Cloud Storage</p>
-            <p className="pl-4">→ Create metadata in Firestore</p>
-            <p className="pl-4">→ Cloud Run extraction (OCR / layout / fields)</p>
-            <p className="pl-4">→ Validation + confidence (retry / human review)</p>
-            <p className="pl-4">→ Index chunks + metadata (tenant-scoped)</p>
-            <p className="pl-4">→ Link to encounter / claim / policy / invoice</p>
+          <div className="neo bg-white p-5">
+            <Mermaid
+              chart={docPipelineChart}
+              caption="Document intelligence pipeline: upload, validate, store, extract, validate confidence, index, and link to records."
+            />
           </div>
           <p className="mt-3 text-sm">
             MVP doc types: Insurance/policy · Preauth letters · Discharge summary
