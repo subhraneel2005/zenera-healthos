@@ -1,5 +1,16 @@
-import type { CSSProperties } from "react";
 import Mermaid from "@/components/Mermaid";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   LuFileSearch,
   LuShieldCheck,
@@ -39,27 +50,6 @@ import type { IconType } from "react-icons";
 
 /* ---------- small helpers ---------- */
 
-function Tag({
-  children,
-  color = "var(--primary)",
-  icon: Icon,
-}: {
-  children: React.ReactNode;
-  color?: string;
-  icon?: IconType;
-}) {
-  return (
-    <span className="neo-tag" style={{ background: color }}>
-      {Icon ? (
-        <span aria-hidden="true" className="inline-flex">
-          <Icon size={12} />
-        </span>
-      ) : null}
-      {children}
-    </span>
-  );
-}
-
 function Section({
   id,
   index,
@@ -76,95 +66,21 @@ function Section({
   return (
     <section id={id} className="scroll-mt-24 py-12 md:py-16">
       <div className="mb-8 flex items-center gap-4">
-        {Icon ? (
-          <span
-            aria-hidden="true"
-            className="grid h-11 w-11 shrink-0 place-items-center border-2 border-ink bg-primary shadow-[3px_3px_0_0_var(--ink)]"
-          >
-            <Icon size={22} />
+        {Icon && (
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
+            <Icon size={20} />
           </span>
-        ) : null}
-        <span className="font-mono text-3xl font-extrabold text-secondary md:text-4xl">
+        )}
+        <span className="font-mono text-3xl font-bold text-muted-foreground md:text-4xl">
           {index}
         </span>
-        <h2 className="text-2xl font-extrabold leading-tight md:text-3xl">
+        <h2 className="text-2xl font-bold leading-tight md:text-3xl">
           {title}
         </h2>
       </div>
       {children}
     </section>
   );
-}
-
-function Card({
-  children,
-  color = "#fff",
-  className = "",
-}: {
-  children: React.ReactNode;
-  color?: string;
-  className?: string;
-}) {
-  return (
-    <div className={`neo p-5 ${className}`} style={{ background: color }}>
-      {children}
-    </div>
-  );
-}
-
-function Suggest({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="neo-note mt-6 p-5">
-      <div className="mb-2 flex items-center gap-2">
-        <span
-          aria-hidden="true"
-          className="grid h-7 w-7 place-items-center border-2 border-ink bg-secondary text-white shadow-[2px_2px_0_0_var(--ink)]"
-        >
-          <LuLightbulb size={16} />
-        </span>
-        <span className="neo-tag" style={{ background: "var(--secondary)", color: "#fff" }}>
-          Suggestion
-        </span>
-        <span className="font-mono text-xs font-bold uppercase tracking-wide text-secondary">
-          non-binding · does not change the MVP plan
-        </span>
-      </div>
-      <p className="mb-2 font-extrabold">{title}</p>
-      <div className="space-y-2 text-sm leading-relaxed">{children}</div>
-    </div>
-  );
-}
-
-function Td({
-  children,
-  head = false,
-  col = false,
-  className = "",
-}: {
-  children: React.ReactNode;
-  head?: boolean;
-  col?: boolean;
-  className?: string;
-}) {
-  return (
-    <td
-      className={`border-2 border-ink p-3 align-top text-sm ${
-        head ? "bg-primary font-bold" : ""
-      } ${col ? "bg-tertiary/15 font-bold" : ""} ${className}`}
-    >
-      {children}
-    </td>
-  );
-}
-
-function Tr({ children }: { children: React.ReactNode }) {
-  return <tr className="border-2 border-ink">{children}</tr>;
 }
 
 /* ---------- data ---------- */
@@ -176,13 +92,13 @@ const modules: {
   desc: string;
   Icon: IconType;
 }[] = [
-  { n: "01", name: "AI Bill Auditor", color: "var(--primary)", Icon: LuFileSearch, desc: "Catch missed, duplicate, package-mismatch and suspicious billing lines before the bill is finalized." },
-  { n: "02", name: "Insurance & TPA Copilot", color: "var(--tertiary)", Icon: LuShieldCheck, desc: "Turn policy/TPA documents into a claim-readiness view with evidence-backed answers." },
-  { n: "03", name: "AI Discharge Manager", color: "var(--secondary)", Icon: LuClipboardCheck, desc: "Stop discharge from becoming a department-chasing exercise with a generated checklist + blockers." },
-  { n: "04", name: "Claim Risk Predictor", color: "var(--green)", Icon: LuActivity, desc: "Estimate, before submission, whether a claim will be queried, rejected or delayed — with reasons." },
-  { n: "05", name: "Denial / Query Intelligence", color: "var(--purple)", Icon: LuTriangleAlert, desc: "Turn every claim query/rejection into reusable, classified operational knowledge." },
-  { n: "06", name: "Revenue Reconciliation", color: "var(--primary)", Icon: LuCalculator, desc: "Show where money is across billed, approved, patient-paid, settled and outstanding states." },
-  { n: "07", name: "Revenue Leakage Radar", color: "var(--tertiary)", Icon: LuRadar, desc: "Management dashboard that tells leadership where revenue is lost, delayed or at risk." },
+  { n: "01", name: "AI Bill Auditor", color: "bg-primary", Icon: LuFileSearch, desc: "Catch missed, duplicate, package-mismatch and suspicious billing lines before the bill is finalized." },
+  { n: "02", name: "Insurance & TPA Copilot", color: "bg-blue-500/15 dark:bg-blue-400/20", Icon: LuShieldCheck, desc: "Turn policy/TPA documents into a claim-readiness view with evidence-backed answers." },
+  { n: "03", name: "AI Discharge Manager", color: "bg-secondary", Icon: LuClipboardCheck, desc: "Stop discharge from becoming a department-chasing exercise with a generated checklist + blockers." },
+  { n: "04", name: "Claim Risk Predictor", color: "bg-green-500/15 dark:bg-green-400/20", Icon: LuActivity, desc: "Estimate, before submission, whether a claim will be queried, rejected or delayed — with reasons." },
+  { n: "05", name: "Denial / Query Intelligence", color: "bg-purple-500/15 dark:bg-purple-400/20", Icon: LuTriangleAlert, desc: "Turn every claim query/rejection into reusable, classified operational knowledge." },
+  { n: "06", name: "Revenue Reconciliation", color: "bg-primary", Icon: LuCalculator, desc: "Show where money is across billed, approved, patient-paid, settled and outstanding states." },
+  { n: "07", name: "Revenue Leakage Radar", color: "bg-blue-500/15 dark:bg-blue-400/20", Icon: LuRadar, desc: "Management dashboard that tells leadership where revenue is lost, delayed or at risk." },
 ];
 
 const archLayers = [
@@ -235,10 +151,10 @@ const timeline = [
 ];
 
 const additions = [
-  ["Synthetic demo / mock mode", "A first-run mode seeded with synthetic patients, encounters and claims so prospects can click through the full loop without importing real data. Reinforces the “synthetic data until security approval” rule."],
+  ["Synthetic demo / mock mode", "A first-run mode seeded with synthetic patients, encounters and claims so prospects can click through the full loop without importing real data. Reinforces the 'synthetic data until security approval' rule."],
   ["Observability & status surface", "Explicit error/empty/loading states, a health dashboard for the Cloud Run AI services, and structured error codes — the spec lists SAST/DAST and monitoring but not a user-facing status/alerting surface."],
   ["AI cost & quota guardrails", "Per-tenant token/spend caps and a usage dashboard, since AI is metered and the commercial model is usage-based."],
-  ["Accessibility baseline (WCAG AA)", "Keyboard navigation, focus states and contrast — important for hospital staff on varied devices, and easy to bake in with the neobrutalist focus rings."],
+  ["Accessibility baseline (WCAG AA)", "Keyboard navigation, focus states and contrast — important for hospital staff on varied devices, and easy to bake in with shadcn focus rings."],
   ["Compliance export kit", "One-click export of audit events and AI findings for the hospital's compliance/audit needs (links to the existing export/delete runbook)."],
   ["Localization readiness", "String extraction / i18n hooks so Indian-language hospital interfaces can be added later without a rewrite."],
 ];
@@ -268,7 +184,7 @@ const architectureChart = `flowchart TD
   end
   A --> AI
   A --> G(("Firebase + Google Cloud<br/>Firestore · Storage · Auth · Functions · App Check · Cloud Run"))
-  classDef layer fill:#fffdf5,stroke:#000,stroke-width:3px;
+  classDef layer fill:#fff,stroke:#000,stroke-width:2px;
   class U,A,G layer;`;
 
 const docPipelineChart = `flowchart TD
@@ -282,7 +198,7 @@ const docPipelineChart = `flowchart TD
   RH --> O
   VC -->|pass| ID["Index chunks + metadata<br/>(tenant-scoped retrieval)"]
   ID --> LK["Link to encounter / claim / policy / invoice"]
-  classDef step fill:#fffdf5,stroke:#000,stroke-width:3px;
+  classDef step fill:#fff,stroke:#000,stroke-width:2px;
   class U,V,S,M,E,O,VC,RH,ID,LK step;`;
 
 const aiPipelineChart = `flowchart LR
@@ -297,7 +213,7 @@ const aiPipelineChart = `flowchart LR
   CT -->|above| PF["Persist finding"]
   HR --> PF
   PF --> AE["Emit audit event"]
-  classDef stage fill:#fffdf5,stroke:#000,stroke-width:3px;
+  classDef stage fill:#fff,stroke:#000,stroke-width:2px;
   class IN,N,DV,RE,MI,SV,EC,CT,HR,PF,AE stage;`;
 
 /* ---------- page ---------- */
@@ -306,89 +222,86 @@ export default function Home() {
   return (
     <div className="font-sans">
       {/* NAV */}
-      <header className="sticky top-0 z-[100] border-b-4 border-ink bg-primary">
+      <header className="sticky top-0 z-[100] border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          <a href="#top" className="flex items-center gap-2 font-extrabold">
-            <span
-              aria-hidden="true"
-              className="grid h-9 w-9 place-items-center border-2 border-ink bg-secondary text-white shadow-[3px_3px_0_0_var(--ink)]"
-            >
-              <LuActivity size={18} />
+          <a href="#top" className="flex items-center gap-2 font-bold">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
+              <LuActivity size={16} />
             </span>
             <span className="hidden text-lg sm:block">ZENERA HEALTHOS</span>
           </a>
-          <nav className="hidden items-center gap-3 font-mono text-xs font-bold md:flex" aria-label="Section navigation">
-            <a href="#modules" className="hover:underline">Modules</a>
-            <a href="#arch" className="hover:underline">Arch</a>
-            <a href="#ai" className="hover:underline">AI Layer</a>
-            <a href="#security" className="hover:underline">Security</a>
-            <a href="#timeline" className="hover:underline">Timeline</a>
-            <a href="#add" className="hover:underline">Additions</a>
-            <a href="/team" className="neo-btn !px-3 !py-1 !text-xs">Team Map</a>
+          <nav className="hidden items-center gap-1 text-sm font-medium md:flex" aria-label="Section navigation">
+            <a href="#modules" className="rounded-md px-3 py-1.5 hover:bg-muted">Modules</a>
+            <a href="#arch" className="rounded-md px-3 py-1.5 hover:bg-muted">Arch</a>
+            <a href="#ai" className="rounded-md px-3 py-1.5 hover:bg-muted">AI Layer</a>
+            <a href="#security" className="rounded-md px-3 py-1.5 hover:bg-muted">Security</a>
+            <a href="#timeline" className="rounded-md px-3 py-1.5 hover:bg-muted">Timeline</a>
+            <a href="#add" className="rounded-md px-3 py-1.5 hover:bg-muted">Additions</a>
+              <a href="/team" className={`${buttonVariants({ variant: "outline", size: "sm" })} ml-1`}>
+                Team Map
+              </a>
           </nav>
-          <a href="#top" className="neo-btn !py-2 !text-sm">
+          <a href="#top" className={buttonVariants({ variant: "outline", size: "sm" })}>
             v2.0 Spec
           </a>
         </div>
       </header>
 
       {/* HERO */}
-      <section id="top" className="border-b-4 border-ink bg-bg">
+      <section id="top" className="border-b bg-muted/30">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-2 md:py-20">
-          <div className="rise">
+          <div>
             <div className="mb-4 flex flex-wrap gap-2">
-              <Tag color="var(--secondary)" icon={LuZap}>AI SaaS</Tag>
-              <Tag color="var(--tertiary)" icon={LuActivity}>Hospital Revenue</Tag>
-              <Tag icon={LuCpu}>Firebase</Tag>
+              <Badge>AI SaaS</Badge>
+              <Badge variant="secondary">Hospital Revenue</Badge>
+              <Badge variant="outline">Firebase</Badge>
             </div>
-            <h1 className="text-4xl font-extrabold leading-[1.05] md:text-6xl">
+            <h1 className="text-4xl font-bold leading-[1.05] md:text-6xl">
               ZENERA
               <br />
-              HEALTH<span className="text-secondary">OS</span>
+              HEALTH<span className="text-muted-foreground">OS</span>
             </h1>
-            <p className="mt-4 max-w-md text-lg font-semibold">
+            <p className="mt-4 max-w-md text-lg font-medium">
               AI-Powered Hospital Revenue &amp; Operations SaaS.
             </p>
-            <p className="mt-3 max-w-md font-mono text-sm text-ink/70">
+            <p className="mt-3 max-w-md font-mono text-sm text-muted-foreground">
               Internal Product + Engineering Handoff · Version 2.0 · August 2026
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#arch" className="neo-btn">
-                Read the build spec <LuArrowRight size={16} aria-hidden="true" />
+              <a href="#arch" className={buttonVariants()}>
+                Read the build spec <LuArrowRight size={16} className="ml-1" aria-hidden="true" />
               </a>
-              <a href="#modules" className="neo-btn" style={{ background: "var(--tertiary)", color: "#000" }}>
+              <a href="#modules" className={buttonVariants({ variant: "secondary" })}>
                 The 7 modules
               </a>
             </div>
           </div>
 
-          <div className="rise" style={{ animationDelay: "80ms" }}>
-            <div className="neo bg-white p-6">
-              <p className="text-center font-extrabold uppercase tracking-wide text-secondary">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center text-sm font-medium uppercase tracking-wide text-muted-foreground">
                 One product · Seven modules
-              </p>
-              <div className="mt-4 grid grid-cols-1 gap-3 font-mono text-sm">
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
                 {modules.map((m) => (
                   <div
                     key={m.n}
-                    className="flex items-center gap-3 border-2 border-ink p-2"
-                    style={{ background: m.color }}
+                    className={`flex items-center gap-3 rounded-lg border p-2.5 ${m.color}`}
                   >
-                    <span
-                      aria-hidden="true"
-                      className="grid h-7 w-7 shrink-0 place-items-center border-2 border-ink bg-white"
-                    >
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-background">
                       <m.Icon size={16} />
                     </span>
-                    <span className="font-bold">{m.name}</span>
+                    <span className="text-sm font-semibold">{m.name}</span>
                   </div>
                 ))}
               </div>
-              <p className="mt-4 text-center font-extrabold">
+              <p className="mt-4 text-center text-sm font-bold">
                 One SaaS. One revenue-cycle workflow.
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -396,127 +309,133 @@ export default function Home() {
         {/* EXEC SUMMARY */}
         <Section id="summary" index="01" title="Executive Summary & Positioning" icon={LuTarget}>
           <div className="grid gap-5 md:grid-cols-2">
-            <Card color="var(--primary)">
-              <p className="font-bold">What it is</p>
-              <p className="mt-2 text-sm leading-relaxed">
-                Not a generic hospital ERP. A hospital revenue-cycle &amp;
-                operational intelligence platform that starts as an overlay on
-                existing systems and expands toward broader management. Seven
-                tightly connected modules reinforce one
-                patient→encounter→billing→claim→revenue loop.
-              </p>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="font-bold">What it is</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Not a generic hospital ERP. A hospital revenue-cycle &amp;
+                  operational intelligence platform that starts as an overlay on
+                  existing systems and expands toward broader management. Seven
+                  tightly connected modules reinforce one
+                  patient→encounter→billing→claim→revenue loop.
+                </p>
+              </CardContent>
             </Card>
             <Card>
-              <p className="font-bold">The core promise</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>Find money hospitals are losing or delaying.</li>
-                <li>Prevent claim problems before submission.</li>
-                <li>Cut manual chasing between departments.</li>
-                <li>Give management a live picture of revenue at risk.</li>
-              </ul>
+              <CardContent className="pt-6">
+                <p className="font-bold">The core promise</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  <li>Find money hospitals are losing or delaying.</li>
+                  <li>Prevent claim problems before submission.</li>
+                  <li>Cut manual chasing between departments.</li>
+                  <li>Give management a live picture of revenue at risk.</li>
+                </ul>
+              </CardContent>
             </Card>
           </div>
 
           <div className="mt-5 grid gap-3 md:grid-cols-2">
-            <Card color="var(--tertiary)" className="!text-black">
-              <p className="flex items-center gap-2 font-extrabold">
-                <LuShoppingBag size={18} aria-hidden="true" /> What the customer buys
-              </p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>One web app, one tenant, one login, one subscription.</li>
-                <li>Shared patient/encounter/claim/revenue data.</li>
-                <li>Evidence-backed, explainable, human-reviewable AI.</li>
-                <li>Real-time operational queues.</li>
-                <li>Integration so hospitals keep existing HIS/HMIS/EMR.</li>
-              </ul>
+            <Card className="border-blue-500/30 bg-blue-500/10 dark:border-blue-400/30 dark:bg-blue-400/10">
+              <CardContent className="pt-6">
+                <p className="flex items-center gap-2 font-bold">
+                  <LuShoppingBag size={18} aria-hidden="true" /> What the customer buys
+                </p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+                  <li>One web app, one tenant, one login, one subscription.</li>
+                  <li>Shared patient/encounter/claim/revenue data.</li>
+                  <li>Evidence-backed, explainable, human-reviewable AI.</li>
+                  <li>Real-time operational queues.</li>
+                  <li>Integration so hospitals keep existing HIS/HMIS/EMR.</li>
+                </ul>
+              </CardContent>
             </Card>
-            <Card color="var(--secondary)" className="!text-black">
-              <p className="flex items-center gap-2 font-extrabold">
-                <LuZap size={18} aria-hidden="true" /> What makes it different
-              </p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>Revenue-cycle focus, not feature-count.</li>
-                <li>Seven modules reinforce each other.</li>
-                <li>AI embedded in workflows, not a chatbot gimmick.</li>
-                <li>Deterministic math stays the source of truth.</li>
-                <li>Every AI finding has evidence + reviewer trail.</li>
-              </ul>
+            <Card className="border-green-500/30 bg-green-500/10 dark:border-green-400/30 dark:bg-green-400/10">
+              <CardContent className="pt-6">
+                <p className="flex items-center gap-2 font-bold">
+                  <LuZap size={18} aria-hidden="true" /> What makes it different
+                </p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+                  <li>Revenue-cycle focus, not feature-count.</li>
+                  <li>Seven modules reinforce each other.</li>
+                  <li>AI embedded in workflows, not a chatbot gimmick.</li>
+                  <li>Deterministic math stays the source of truth.</li>
+                  <li>Every AI finding has evidence + reviewer trail.</li>
+                </ul>
+              </CardContent>
             </Card>
           </div>
 
-          <div className="neo mt-5 bg-ink p-5 text-white">
-            <p className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wide text-primary">
-              <LuHammer size={14} aria-hidden="true" /> Build decision
-            </p>
-            <p className="mt-1 text-sm">
+          <Alert className="mt-5">
+            <LuHammer className="h-4 w-4" />
+            <AlertTitle className="text-xs font-bold uppercase tracking-wide">Build decision</AlertTitle>
+            <AlertDescription className="mt-1 text-sm">
               Use the existing Firebase project as the platform backbone for
               MVP: Firebase Authentication, Cloud Firestore, Cloud Storage, Cloud
               Functions, App Check and Hosting where useful. Use Cloud Run for
               heavier Python AI/ML workloads. Do not put all AI/ML inference
               inside Functions.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         </Section>
 
         {/* MODULES */}
         <Section id="modules" index="02" title="The Seven Intelligence Modules" icon={LuBoxes}>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {modules.map((m, i) => (
-              <div
-                key={m.n}
-                className="neo rise p-5"
-                style={{ background: i % 2 ? "#fff" : "#fffdf5", animationDelay: `${i * 60}ms` }}
-              >
-                <div
-                  aria-hidden="true"
-                  className="mb-3 grid h-12 w-12 place-items-center border-2 border-ink text-xl font-extrabold shadow-[3px_3px_0_0_var(--ink)]"
-                  style={{ background: m.color }}
-                >
-                  <m.Icon size={24} />
-                </div>
-                <h3 className="text-lg font-extrabold">{m.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed">{m.desc}</p>
-              </div>
+            {modules.map((m) => (
+              <Card key={m.n}>
+                <CardContent className="pt-6">
+                  <div
+                    className={`mb-3 grid h-11 w-11 place-items-center rounded-lg ${m.color}`}
+                  >
+                    <m.Icon size={22} />
+                  </div>
+                  <h3 className="text-lg font-bold">{m.name}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{m.desc}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </Section>
 
         {/* ARCHITECTURE */}
         <Section id="arch" index="03" title="Product Architecture: One Platform, Seven Modules" icon={LuCpu}>
-          <div className="neo bg-white p-5">
-            <Mermaid
-              chart={architectureChart}
-              caption="Zenera HealthOS platform architecture: hospital user into the web app, core platform, shared AI layer with seven modules, and Firebase + Google Cloud."
-            />
-          </div>
+          <Card>
+            <CardContent className="pt-6">
+              <Mermaid
+                chart={architectureChart}
+                caption="Zenera HealthOS platform architecture: hospital user into the web app, core platform, shared AI layer with seven modules, and Firebase + Google Cloud."
+              />
+            </CardContent>
+          </Card>
 
-          <h3 className="mb-3 mt-8 text-xl font-extrabold">
+          <h3 className="mb-3 mt-8 text-xl font-bold">
             Firebase Architecture &amp; Why It Fits
           </h3>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border-2 border-ink text-left">
-              <tbody>
-                <Tr>
-                  <Td head>Layer</Td>
-                  <Td head>Firebase / GCP choice</Td>
-                  <Td head>Use in HealthOS</Td>
-                </Tr>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Layer</TableHead>
+                  <TableHead>Firebase / GCP choice</TableHead>
+                  <TableHead>Use in HealthOS</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {archLayers.map(([a, b, c]) => (
-                  <Tr key={a}>
-                    <Td col>{a}</Td>
-                    <Td>{b}</Td>
-                    <Td>{c}</Td>
-                  </Tr>
+                  <TableRow key={a}>
+                    <TableCell className="font-medium">{a}</TableCell>
+                    <TableCell>{b}</TableCell>
+                    <TableCell className="text-muted-foreground">{c}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
 
-          <div className="neo mt-5 bg-ink p-5 text-white">
-            <p className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wide text-secondary">
-              <LuShieldAlert size={14} aria-hidden="true" /> Healthcare security caveat
-            </p>
-            <p className="mt-1 text-sm">
+          <Alert variant="destructive" className="mt-5">
+            <LuShieldAlert className="h-4 w-4" />
+            <AlertTitle className="text-xs font-bold uppercase tracking-wide">Healthcare security caveat</AlertTitle>
+            <AlertDescription className="mt-1 text-sm">
               Firebase/Google Cloud services do not automatically make an
               application compliant. Google states customers remain responsible
               for their own compliance controls. For U.S. HIPAA, the appropriate
@@ -524,47 +443,52 @@ export default function Home() {
               India, complete the applicable privacy, healthcare-data and
               contractual requirements with legal/security review before a real
               pilot.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
 
-          {/* REQUIRED SUGGESTION CALLOUT */}
-          <Suggest title="Alternative backend stack worth considering (suggestion only)">
-            <p>
-              The spec is intentionally Firebase-first. As a non-binding
-              suggestion, the same architecture can be built on a relational
-              stack that many teams find easier to reason about for financial
-              data and RAG:
-            </p>
-            <ul className="list-disc space-y-1 pl-5">
-              <li>
-                <b>Postgres instead of Cloud Firestore</b> — strong transactional
-                guarantees for financial writes, mature multi-tenant patterns
-                (row-level security / schema-per-tenant), and easier deterministic
-                reconciliation SQL.
-              </li>
-              <li>
-                <b>pgvector instead of a separate vector store for RAG</b> —
-                policy/claim/denial chunks and tenant-scoped retrieval live next
-                to the operational data, with source-metadata filtering.
-              </li>
-              <li>
-                <b>better-auth instead of Firebase Authentication</b> — self-hosted,
-                framework-friendly auth with roles/custom claims you fully own,
-                no lock-in, and easy integration with the Postgres tenant model.
-              </li>
-            </ul>
-            <p className="text-ink/70">
-              This does not change the MVP scope, the seven modules, or the
-              revenue-cycle workflow — only where the bytes live. Cloud Run,
-              App Check-style abuse protection, Secret Manager and IAM concepts
-              still apply.
-            </p>
-          </Suggest>
+          <Alert className="mt-5 border-dashed">
+            <LuLightbulb className="h-4 w-4" />
+            <AlertTitle className="text-xs font-bold uppercase tracking-wide">
+              Alternative backend stack worth considering (suggestion only)
+            </AlertTitle>
+            <AlertDescription className="mt-2 text-sm">
+              <p className="mb-2">
+                The spec is intentionally Firebase-first. As a non-binding
+                suggestion, the same architecture can be built on a relational
+                stack that many teams find easier to reason about for financial
+                data and RAG:
+              </p>
+              <ul className="list-disc space-y-1 pl-5">
+                <li>
+                  <b>Postgres instead of Cloud Firestore</b> — strong transactional
+                  guarantees for financial writes, mature multi-tenant patterns
+                  (row-level security / schema-per-tenant), and easier deterministic
+                  reconciliation SQL.
+                </li>
+                <li>
+                  <b>pgvector instead of a separate vector store for RAG</b> —
+                  policy/claim/denial chunks and tenant-scoped retrieval live next
+                  to the operational data, with source-metadata filtering.
+                </li>
+                <li>
+                  <b>better-auth instead of Firebase Authentication</b> — self-hosted,
+                  framework-friendly auth with roles/custom claims you fully own,
+                  no lock-in, and easy integration with the Postgres tenant model.
+                </li>
+              </ul>
+              <p className="mt-2 text-muted-foreground">
+                This does not change the MVP scope, the seven modules, or the
+                revenue-cycle workflow — only where the bytes live. Cloud Run,
+                App Check-style abuse protection, Secret Manager and IAM concepts
+                still apply.
+              </p>
+            </AlertDescription>
+          </Alert>
 
-          <h3 className="mb-3 mt-8 text-lg font-extrabold">
+          <h3 className="mb-3 mt-8 text-lg font-bold">
             Firebase implementation rules
           </h3>
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {[
               "No wildcard Firestore rules (allow read, write: if true).",
               "Tenant ID is part of every top-level data decision.",
@@ -576,41 +500,45 @@ export default function Home() {
               "Immutable audit events for financial actions.",
               "No PHI in logs, analytics or push notifications.",
             ].map((r) => (
-              <li key={r} className="neo-sm bg-white p-3 text-sm">
+              <div key={r} className="rounded-lg border p-3 text-sm">
                 {r}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </Section>
 
         {/* DOMAIN MODEL */}
         <Section id="domain" index="04" title="Shared Domain Model & Firestore Structure" icon={LuDatabase}>
-          <p className="mb-4 text-sm">
+          <p className="mb-4 text-sm text-muted-foreground">
             Tenant-first. No flat database where records can be queried without
             tenant scoping.
           </p>
           <div className="overflow-x-auto">
-            <div className="neo bg-white p-4 font-mono text-xs leading-relaxed">
-              <p>/tenants/{"{tenantId}"}</p>
-              <p className="pl-4">/branches /departments /users /roles</p>
-              <p className="pl-4">/patients/{"{patientId}"}/encounters/{"{encounterId}"}</p>
-              <p className="pl-4">/encounters/{"{encounterId}"}/charges</p>
-              <p className="pl-4">/invoices /payments</p>
-              <p className="pl-4">/insurancePolicies /preauths</p>
-              <p className="pl-4">/claims/{"{claimId}"}/documents|events|queries|settlements</p>
-              <p className="pl-4">/documents /workflows /tasks</p>
-              <p className="pl-4">/aiFindings /auditEvents</p>
-              <p className="pl-4">/config/billingRules|claimRules|roles|aiPolicies</p>
-            </div>
+            <Card>
+              <CardContent className="pt-6 font-mono text-xs leading-relaxed">
+                <p>/tenants/{"{tenantId}"}</p>
+                <p className="pl-4">/branches /departments /users /roles</p>
+                <p className="pl-4">/patients/{"{patientId}"}/encounters/{"{encounterId}"}</p>
+                <p className="pl-4">/encounters/{"{encounterId}"}/charges</p>
+                <p className="pl-4">/invoices /payments</p>
+                <p className="pl-4">/insurancePolicies /preauths</p>
+                <p className="pl-4">/claims/{"{claimId}"}/documents|events|queries|settlements</p>
+                <p className="pl-4">/documents /workflows /tasks</p>
+                <p className="pl-4">/aiFindings /auditEvents</p>
+                <p className="pl-4">/config/billingRules|claimRules|roles|aiPolicies</p>
+              </CardContent>
+            </Card>
           </div>
           <div className="mt-4 overflow-x-auto">
-            <table className="w-full border-collapse border-2 border-ink text-left">
-              <tbody>
-                <Tr>
-                  <Td head>Entity</Td>
-                  <Td head>Must contain</Td>
-                  <Td head>Why it matters</Td>
-                </Tr>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Entity</TableHead>
+                  <TableHead>Must contain</TableHead>
+                  <TableHead>Why it matters</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {[
                   ["Patient", "patientId, tenantId, MRN, demographics, contact, status", "Stable patient identity."],
                   ["Encounter", "encounterId, patientId, branchId, dates, payerId, status", "Link between clinical + revenue activity."],
@@ -620,14 +548,14 @@ export default function Home() {
                   ["AI Finding", "module, category, confidence, reasonCodes, evidenceRefs, reviewerId", "Explainable AI + human-review trail."],
                   ["Audit Event", "actorId, role, action, entityId, before/afterHash", "Traceability for sensitive actions."],
                 ].map(([a, b, c]) => (
-                  <Tr key={a}>
-                    <Td col>{a}</Td>
-                    <Td className="font-mono text-xs">{b}</Td>
-                    <Td>{c}</Td>
-                  </Tr>
+                  <TableRow key={a}>
+                    <TableCell className="font-medium">{a}</TableCell>
+                    <TableCell className="font-mono text-xs">{b}</TableCell>
+                    <TableCell className="text-muted-foreground">{c}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </Section>
 
@@ -635,79 +563,85 @@ export default function Home() {
         <Section id="module-detail" index="05" title="Module Deep-Dives" icon={LuLayers}>
           <div className="space-y-4">
             <Card>
-              <div className="flex items-center gap-2">
-                <Tag color="var(--primary)">M1</Tag>
-                <h3 className="text-lg font-extrabold">AI Bill Auditor</h3>
-              </div>
-              <p className="mt-2 text-sm">
-                Workflow: open encounter → Run Bill Audit (or event-triggered) →
-                deterministic rules first (dup IDs, invalid qty, impossible
-                totals, package constraints) → ML/AI on normalized set → findings
-                stored with confidence + evidence + financial impact → staff
-                review (accept / dismiss / investigate / false-positive). System
-                never silently edits the invoice in MVP.
-              </p>
-              <p className="mt-2 text-sm font-bold">Detection categories</p>
-              <p className="text-sm">
-                Missed charge · Duplicate charge · Package inconsistency ·
-                Quantity anomaly · Rate anomaly · Temporal anomaly ·
-                Documentation gap · Manual adjustment anomaly.
-              </p>
-              <p className="mt-2 font-mono text-xs text-ink/70">
-                Owners: Chandana (rules), Priyanka (impact), Sanjay (ledger APIs),
-                Naman (AI contract), Dhyuthi (evidence), Swastik (UI), Pragna (security).
-              </p>
-            </Card>
-
-            <Card color="#eef6ff">
-              <div className="flex items-center gap-2">
-                <Tag color="var(--tertiary)">M2</Tag>
-                <h3 className="text-lg font-extrabold">Insurance &amp; TPA Copilot</h3>
-              </div>
-              <p className="mt-2 text-sm">
-                Upload policy/TPA docs → extract structured fields → RAG retrieves
-                relevant clauses for the encounter → generate claim-readiness view
-                (covered / unknown / not covered, required documents, constraints,
-                questions) → every answer cites source document/page/chunk → user
-                approves facts into configurable payer rules.
-              </p>
-              <div className="neo-note mt-3 p-3">
-                <p className="flex items-center gap-2 text-xs font-bold text-secondary">
-                  <LuShieldAlert size={14} aria-hidden="true" /> Hard AI rule
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge>M1</Badge>
+                  <h3 className="text-lg font-bold">AI Bill Auditor</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Workflow: open encounter → Run Bill Audit (or event-triggered) →
+                  deterministic rules first (dup IDs, invalid qty, impossible
+                  totals, package constraints) → ML/AI on normalized set → findings
+                  stored with confidence + evidence + financial impact → staff
+                  review (accept / dismiss / investigate / false-positive). System
+                  never silently edits the invoice in MVP.
                 </p>
-                <p className="mt-1 text-sm">
-                  Never state an uncertain interpretation as fact. Use labels:
-                  “Found in source,” “Not found,” “Potentially applicable,”
-                  “Requires human confirmation.”
+                <p className="mt-2 text-sm font-medium">Detection categories</p>
+                <p className="text-sm text-muted-foreground">
+                  Missed charge · Duplicate charge · Package inconsistency ·
+                  Quantity anomaly · Rate anomaly · Temporal anomaly ·
+                  Documentation gap · Manual adjustment anomaly.
                 </p>
-              </div>
+                <p className="mt-2 font-mono text-xs text-muted-foreground">
+                  Owners: Chandana (rules), Priyanka (impact), Sanjay (ledger APIs),
+                  Naman (AI contract), Dhyuthi (evidence), Swastik (UI), Pragna (security).
+                </p>
+              </CardContent>
             </Card>
 
-            <Card color="#ffeaea">
-              <div className="flex items-center gap-2">
-                <Tag color="var(--secondary)">M3</Tag>
-                <h3 className="text-lg font-extrabold">AI Discharge Manager</h3>
-              </div>
-              <p className="mt-2 text-sm">
-                Checklist generated from encounter, payer, procedure and hospital
-                rules across Clinical / Nursing / Pharmacy / Diagnostics / Billing
-                / Insurance / Payment. AI predicts the next blocker, summarizes the
-                delay reason, creates targeted tasks, escalates on SLA. Completion
-                is a structured state change — never generative text.
-              </p>
+            <Card className="border-blue-500/30 bg-blue-500/10 dark:border-blue-400/30 dark:bg-blue-400/10">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">M2</Badge>
+                  <h3 className="text-lg font-bold">Insurance &amp; TPA Copilot</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Upload policy/TPA docs → extract structured fields → RAG retrieves
+                  relevant clauses for the encounter → generate claim-readiness view
+                  (covered / unknown / not covered, required documents, constraints,
+                  questions) → every answer cites source document/page/chunk → user
+                  approves facts into configurable payer rules.
+                </p>
+                <Alert variant="destructive" className="mt-3">
+                  <LuShieldAlert className="h-4 w-4" />
+                  <AlertTitle className="text-xs font-bold">Hard AI rule</AlertTitle>
+                  <AlertDescription className="text-sm">
+                    Never state an uncertain interpretation as fact. Use labels:
+                    &quot;Found in source,&quot; &quot;Not found,&quot; &quot;Potentially applicable,&quot;
+                    &quot;Requires human confirmation.&quot;
+                  </AlertDescription>
+                </Alert>
+              </CardContent>
             </Card>
 
-            <Card color="#e9fbf0">
-              <div className="flex items-center gap-2">
-                <Tag color="var(--green)">M4</Tag>
-                <h3 className="text-lg font-extrabold">Claim Risk Predictor</h3>
-              </div>
-              <p className="mt-2 text-sm">
-                Hybrid: deterministic rules + interpretable baseline ML (no
-                black-box deep model first). Features: documentation, financial,
-                claim history, encounter, policy, workflow.
-              </p>
-              <pre className="neo-sm mt-2 overflow-x-auto bg-white p-3 font-mono text-xs">{`{
+            <Card className="border-red-500/30 bg-red-500/10 dark:border-red-400/30 dark:bg-red-400/10">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">M3</Badge>
+                  <h3 className="text-lg font-bold">AI Discharge Manager</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Checklist generated from encounter, payer, procedure and hospital
+                  rules across Clinical / Nursing / Pharmacy / Diagnostics / Billing
+                  / Insurance / Payment. AI predicts the next blocker, summarizes the
+                  delay reason, creates targeted tasks, escalates on SLA. Completion
+                  is a structured state change — never generative text.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-green-500/30 bg-green-500/10 dark:border-green-400/30 dark:bg-green-400/10">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">M4</Badge>
+                  <h3 className="text-lg font-bold">Claim Risk Predictor</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Hybrid: deterministic rules + interpretable baseline ML (no
+                  black-box deep model first). Features: documentation, financial,
+                  claim history, encounter, policy, workflow.
+                </p>
+                <pre className="mt-2 overflow-x-auto rounded-lg border bg-background p-3 font-mono text-xs">{`{
   "riskScore": 0-100,
   "riskBand": "LOW | MEDIUM | HIGH",
   "topFactors": [{ "code": "MISSING_DOCUMENT",
@@ -715,67 +649,74 @@ export default function Home() {
   "recommendedActions": [...],
   "modelVersion": "...", "generatedAt": "..."
 }`}</pre>
+              </CardContent>
             </Card>
 
-            <Card color="#f3ecff">
-              <div className="flex items-center gap-2">
-                <Tag color="var(--purple)">M5</Tag>
-                <h3 className="text-lg font-extrabold">Denial / Query Intelligence</h3>
-              </div>
-              <p className="mt-2 text-sm">
-                Record/import query or denial → classify via taxonomy → link
-                evidence → AI root-cause summary + prevention step → user confirms
-                → feeds prevention rules + model dataset. Distinct outcomes must
-                not collapse: rejected / queried / partially approved / delayed.
-              </p>
-              <p className="mt-2 text-sm font-bold">Taxonomy</p>
-              <p className="text-sm">
-                Missing documentation · Insufficient clinical evidence ·
-                Eligibility/coverage · Preauth · Coding/package mismatch ·
-                Billing arithmetic · Policy limit/exclusion · Duplicate data ·
-                Payer/TPA delay · Other.
-              </p>
+            <Card className="border-purple-500/30 bg-purple-500/10 dark:border-purple-400/30 dark:bg-purple-400/10">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">M5</Badge>
+                  <h3 className="text-lg font-bold">Denial / Query Intelligence</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Record/import query or denial → classify via taxonomy → link
+                  evidence → AI root-cause summary + prevention step → user confirms
+                  → feeds prevention rules + model dataset. Distinct outcomes must
+                  not collapse: rejected / queried / partially approved / delayed.
+                </p>
+                <p className="mt-2 text-sm font-medium">Taxonomy</p>
+                <p className="text-sm text-muted-foreground">
+                  Missing documentation · Insufficient clinical evidence ·
+                  Eligibility/coverage · Preauth · Coding/package mismatch ·
+                  Billing arithmetic · Policy limit/exclusion · Duplicate data ·
+                  Payer/TPA delay · Other.
+                </p>
+              </CardContent>
             </Card>
 
             <Card>
-              <div className="flex items-center gap-2">
-                <Tag color="var(--primary)">M6</Tag>
-                <h3 className="text-lg font-extrabold">Revenue Reconciliation</h3>
-              </div>
-              <p className="mt-2 text-sm font-bold">Deterministic equations (typed backend, tested):</p>
-              <pre className="neo-sm mt-2 overflow-x-auto bg-white p-3 font-mono text-xs">{`Invoice Total
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge>M6</Badge>
+                  <h3 className="text-lg font-bold">Revenue Reconciliation</h3>
+                </div>
+                <p className="mt-2 text-sm font-medium">Deterministic equations (typed backend, tested):</p>
+                <pre className="mt-2 overflow-x-auto rounded-lg border bg-background p-3 font-mono text-xs">{`Invoice Total
   - Deductions - Patient Responsibility - Write-offs
   = Expected Payer Settlement
 Expected - Actual = Payer Outstanding / Variance
 
 Invoice Total - Patient Payment - Payer Settlement - Write-offs
   = Remaining Financial Balance`}</pre>
-              <p className="mt-2 text-sm">
-                Statuses: Matched · Partially matched · Underpaid · Overpaid ·
-                Pending settlement · Unapplied payment · Unknown/manual review.
-                Never ask an LLM to calculate totals.
-              </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Statuses: Matched · Partially matched · Underpaid · Overpaid ·
+                  Pending settlement · Unapplied payment · Unknown/manual review.
+                  Never ask an LLM to calculate totals.
+                </p>
+              </CardContent>
             </Card>
 
-            <Card color="#eef6ff">
-              <div className="flex items-center gap-2">
-                <Tag color="var(--tertiary)">M7</Tag>
-                <h3 className="text-lg font-extrabold">Revenue Leakage Radar</h3>
-              </div>
-              <p className="mt-2 text-sm">
-                Management dashboard cards: Billed Today · Expected Realization ·
-                Revenue at Risk (no double-counting) · Stuck Claims · Potential
-                Missed Charges · Pending Discharge Revenue · Query Rate ·
-                Settlement Variance. One canonical financial impact + dedup logic
-                (Priyanka).
-              </p>
+            <Card className="border-blue-500/30 bg-blue-500/10 dark:border-blue-400/30 dark:bg-blue-400/10">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">M7</Badge>
+                  <h3 className="text-lg font-bold">Revenue Leakage Radar</h3>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Management dashboard cards: Billed Today · Expected Realization ·
+                  Revenue at Risk (no double-counting) · Stuck Claims · Potential
+                  Missed Charges · Pending Discharge Revenue · Query Rate ·
+                  Settlement Variance. One canonical financial impact + dedup logic
+                  (Priyanka).
+                </p>
+              </CardContent>
             </Card>
           </div>
         </Section>
 
         {/* SHARED AI LAYER */}
         <Section id="ai" index="06" title="Shared AI Layer" icon={LuBrain}>
-          <p className="mb-4 text-sm">
+          <p className="mb-4 text-sm text-muted-foreground">
             Every module consumes AI through stable internal interfaces, not by
             calling models directly from feature code (Naman owns this).
           </p>
@@ -791,42 +732,48 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
               ["AI Audit Log", "Model/version, inputs, output, reviewer, time."],
               ["Human Review Queue", "Route uncertain/high-impact findings."],
             ].map(([a, b]) => (
-              <div key={a} className="neo-sm bg-white p-3">
-                <p className="font-bold">{a}</p>
-                <p className="text-sm">{b}</p>
+              <div key={a} className="rounded-lg border p-3">
+                <p className="font-medium">{a}</p>
+                <p className="text-sm text-muted-foreground">{b}</p>
               </div>
             ))}
           </div>
 
-          <div className="neo mt-4 bg-white p-5">
-            <Mermaid
-              chart={aiPipelineChart}
-              caption="Shared AI layer standard pipeline: normalize, validate, retrieve evidence, infer, validate, check, threshold, human review, persist, emit audit event."
-            />
-          </div>
+          <Card className="mt-4">
+            <CardContent className="pt-6">
+              <Mermaid
+                chart={aiPipelineChart}
+                caption="Shared AI layer standard pipeline: normalize, validate, retrieve evidence, infer, validate, check, threshold, human review, persist, emit audit event."
+              />
+            </CardContent>
+          </Card>
 
-          <Suggest title="RAG storage suggestion (non-binding)">
-            <p>
+          <Alert className="mt-4 border-dashed">
+            <LuLightbulb className="h-4 w-4" />
+            <AlertTitle className="text-xs font-bold uppercase tracking-wide">RAG storage suggestion (non-binding)</AlertTitle>
+            <AlertDescription className="mt-2 text-sm">
               The RAG Service above can be backed by <b>pgvector</b> (Postgres)
               instead of a separate vector database: policy/claim/denial chunks
               and their tenant-scoped metadata live beside operational data,
               giving you filtered, citation-aware retrieval with one system. This
               pairs with the Postgres / better-auth suggestion in the
               architecture section and does not alter the AI pipeline contract.
-            </p>
-          </Suggest>
+            </AlertDescription>
+          </Alert>
         </Section>
 
         {/* DOCUMENT INTELLIGENCE */}
         <Section id="docs" index="07" title="Document Intelligence Pipeline" icon={LuFileText}>
-          <p className="mb-3 text-sm">Dhyuthi owns this; Naman + Subhraneel support AI reasoning.</p>
-          <div className="neo bg-white p-5">
-            <Mermaid
-              chart={docPipelineChart}
-              caption="Document intelligence pipeline: upload, validate, store, extract, validate confidence, index, and link to records."
-            />
-          </div>
-          <p className="mt-3 text-sm">
+          <p className="mb-3 text-sm text-muted-foreground">Dhyuthi owns this; Naman + Subhraneel support AI reasoning.</p>
+          <Card>
+            <CardContent className="pt-6">
+              <Mermaid
+                chart={docPipelineChart}
+                caption="Document intelligence pipeline: upload, validate, store, extract, validate confidence, index, and link to records."
+              />
+            </CardContent>
+          </Card>
+          <p className="mt-3 text-sm text-muted-foreground">
             MVP doc types: Insurance/policy · Preauth letters · Discharge summary
             · Bills/invoices · Lab reports · Radiology/procedure reports · Claim
             query/denial letters · Implant/consumable invoices. Treat every
@@ -837,7 +784,7 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
 
         {/* API + EVENTS */}
         <Section id="api" index="08" title="Backend API & Event Contracts" icon={LuCode}>
-          <p className="mb-3 text-sm">
+          <p className="mb-3 text-sm text-muted-foreground">
             The web client must not implement financial or AI logic directly —
             use callable HTTPS / Cloud Functions / Cloud Run APIs.
           </p>
@@ -856,13 +803,13 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
               "Analytics: getDashboardMetrics, getAging",
               "Integrations: importEncounter, exportClaim, healthCheck",
             ].map((e) => (
-              <div key={e} className="neo-sm bg-white p-2 font-mono text-xs">
+              <div key={e} className="rounded-lg border p-2 font-mono text-xs">
                 {e}
               </div>
             ))}
           </div>
-          <p className="mt-4 text-sm font-bold">Events (idempotent — no duplicate charges/payments/claims/findings)</p>
-          <p className="font-mono text-xs">
+          <p className="mt-4 text-sm font-medium">Events (idempotent — no duplicate charges/payments/claims/findings)</p>
+          <p className="font-mono text-xs text-muted-foreground">
             patient.created · encounter.created/updated · charge.created/reversed ·
             invoice.draft/finalized · payment.received · claim.created/submitted/
             queried/rejected/approved/settled · document.uploaded/processed/failed ·
@@ -873,33 +820,35 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
         {/* RBAC */}
         <Section id="rbac" index="09" title="RBAC & User Roles" icon={LuUsers}>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border-2 border-ink text-left">
-              <tbody>
-                <Tr>
-                  <Td head>Role</Td>
-                  <Td head>Primary permissions</Td>
-                </Tr>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Primary permissions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {roles.map(([a, b]) => (
-                  <Tr key={a}>
-                    <Td col>{a}</Td>
-                    <Td>{b}</Td>
-                  </Tr>
+                  <TableRow key={a}>
+                    <TableCell className="font-medium">{a}</TableCell>
+                    <TableCell className="text-muted-foreground">{b}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
-          <div className="neo mt-4 bg-ink p-4 text-white">
-            <p className="text-sm">
+          <Alert className="mt-4">
+            <AlertDescription className="text-sm">
               The UI is not the security boundary. The same authorization
               decision must be enforced server-side and in Firestore/Storage
               rules.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         </Section>
 
         {/* SECURITY */}
         <Section id="security" index="10" title="Security, Privacy & Production Controls" icon={LuLock}>
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {[
               "Tenant isolation on every query path and server op.",
               "Least privilege; default role has no access until granted.",
@@ -916,39 +865,40 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
               "Access-review process for Zenera staff.",
               "Break-glass support access: explicit, timed, audited.",
             ].map((r) => (
-              <li key={r} className="neo-sm bg-white p-3 text-sm">
+              <div key={r} className="rounded-lg border p-3 text-sm">
                 {r}
-              </li>
+              </div>
             ))}
-          </ul>
-          <div className="neo-note mt-4 p-4">
-            <p className="flex items-center gap-2 font-extrabold text-secondary">
-              <LuShieldAlert size={16} aria-hidden="true" /> Production gate
-            </p>
-            <p className="mt-1 text-sm">
+          </div>
+          <Alert variant="destructive" className="mt-4">
+            <LuShieldAlert className="h-4 w-4" />
+            <AlertTitle className="font-bold">Production gate</AlertTitle>
+            <AlertDescription className="text-sm">
               Do not onboard a real hospital with live patient data until
               security, legal/privacy review, data-processing terms, incident
               response, backup/recovery and required healthcare/privacy controls
               are signed off.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         </Section>
 
         {/* INTEGRATION */}
         <Section id="integration" index="11" title="Integration Strategy" icon={LuPlug}>
-          <p className="mb-3 text-sm">
+          <p className="mb-3 text-sm text-muted-foreground">
             Hospitals rarely replace HIS/HMIS on day one. Build adapters so
             HealthOS sits alongside existing systems; never hard-code one
-            hospital's export format into the core domain model.
+            hospital&apos;s export format into the core domain model.
           </p>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border-2 border-ink text-left">
-              <tbody>
-                <Tr>
-                  <Td head>Level</Td>
-                  <Td head>Method</Td>
-                  <Td head>Purpose</Td>
-                </Tr>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Level</TableHead>
+                  <TableHead>Method</TableHead>
+                  <TableHead>Purpose</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {[
                   ["L1", "CSV/Excel import", "Fast pilot onboarding."],
                   ["L2", "REST API", "Two-way sync with hospital APIs."],
@@ -956,14 +906,14 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
                   ["L4", "FHIR", "Structured interoperability."],
                   ["L5", "NHCX/ABDM", "Future enterprise claim workflows."],
                 ].map(([a, b, c]) => (
-                  <Tr key={a}>
-                    <Td col>{a}</Td>
-                    <Td>{b}</Td>
-                    <Td>{c}</Td>
-                  </Tr>
+                  <TableRow key={a}>
+                    <TableCell className="font-medium">{a}</TableCell>
+                    <TableCell>{b}</TableCell>
+                    <TableCell className="text-muted-foreground">{c}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </Section>
 
@@ -983,19 +933,21 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
               "AI Findings: central review queue",
               "Admin: tenant, users, roles, payer rules, AI policies",
             ].map((s) => (
-              <div key={s} className="neo-sm bg-white p-3 text-sm">
+              <div key={s} className="rounded-lg border p-3 text-sm">
                 {s}
               </div>
             ))}
           </div>
-          <div className="neo mt-4 bg-primary p-4">
-            <p className="font-extrabold">UX principle</p>
-            <p className="mt-1 text-sm">
-              Every AI alert answers four questions immediately: <b>What happened?
-              Why do you think this? How much could it matter? What should I do
-              next?</b>
-            </p>
-          </div>
+          <Card className="mt-4">
+            <CardContent className="pt-6">
+              <p className="font-bold">UX principle</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Every AI alert answers four questions immediately: <b>What happened?
+                Why do you think this? How much could it matter? What should I do
+                next?</b>
+              </p>
+            </CardContent>
+          </Card>
         </Section>
 
         {/* TESTING */}
@@ -1008,8 +960,10 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
               ["Security", "Cross-tenant attempts, privilege escalation, forged tokens, path traversal, abuse/rate-limit, data leakage."],
             ].map(([a, b]) => (
               <Card key={a}>
-                <p className="font-extrabold">{a}</p>
-                <p className="mt-1 text-sm">{b}</p>
+                <CardContent className="pt-6">
+                  <p className="font-bold">{a}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{b}</p>
+                </CardContent>
               </Card>
             ))}
           </div>
@@ -1018,25 +972,27 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
         {/* TIMELINE */}
         <Section id="timeline" index="14" title="MVP Timeline — 16 Weeks" icon={LuCalendarClock}>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border-2 border-ink text-left">
-              <tbody>
-                <Tr>
-                  <Td head>Time</Td>
-                  <Td head>Milestone</Td>
-                  <Td head>Leads</Td>
-                </Tr>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Time</TableHead>
+                  <TableHead>Milestone</TableHead>
+                  <TableHead>Leads</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {timeline.map(([a, b, c]) => (
-                  <Tr key={a}>
-                    <Td col className="font-mono">{a}</Td>
-                    <Td className="font-bold">{b}</Td>
-                    <Td className="text-sm">{c}</Td>
-                  </Tr>
+                  <TableRow key={a}>
+                    <TableCell className="font-mono font-medium">{a}</TableCell>
+                    <TableCell className="font-semibold">{b}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{c}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
-          <div className="neo mt-4 bg-ink p-4 text-white">
-            <p className="text-sm">
+          <Alert className="mt-4">
+            <AlertDescription className="text-sm">
               First 10 working days: kickoff + GitHub board; Sanjay → Firebase
               environments; Pragna → threat model + RBAC; Swastik → app shell +
               protected routes; Priyanka → KPI dictionary; Chandana → rule
@@ -1044,38 +1000,42 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
               RAG architecture; Chandini → risk features; Naman → AI gateway;
               Ayushi → 3–5 hospital interviews; all engineering → first end-to-end
               happy path.
-            </p>
-          </div>
+            </AlertDescription>
+          </Alert>
         </Section>
 
         {/* DEFINITION OF DONE + METRICS */}
         <Section id="done" index="15" title="Definition of Done & Pilot Metrics" icon={LuCircleCheckBig}>
           <div className="grid gap-4 md:grid-cols-2">
-            <Card color="var(--primary)">
-              <p className="font-extrabold">Definition of Done</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>Documented owner + reviewer.</li>
-                <li>Clear role + business outcome.</li>
-                <li>Validation for normal + edge cases.</li>
-                <li>Server-side + Rules authorization.</li>
-                <li>Audit events for sensitive actions.</li>
-                <li>Schema-validated, evidence-linked AI.</li>
-                <li>Deterministic financial math.</li>
-                <li>Fail-safe errors; tests pass; staged demo.</li>
-              </ul>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="font-bold">Definition of Done</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  <li>Documented owner + reviewer.</li>
+                  <li>Clear role + business outcome.</li>
+                  <li>Validation for normal + edge cases.</li>
+                  <li>Server-side + Rules authorization.</li>
+                  <li>Audit events for sensitive actions.</li>
+                  <li>Schema-validated, evidence-linked AI.</li>
+                  <li>Deterministic financial math.</li>
+                  <li>Fail-safe errors; tests pass; staged demo.</li>
+                </ul>
+              </CardContent>
             </Card>
             <Card>
-              <p className="font-extrabold">Pilot metrics (engineering targets)</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>Bill-audit precision &gt; 80%.</li>
-                <li>False-positive rate &lt; 20%.</li>
-                <li>Doc extraction field accuracy &gt; 90%.</li>
-                <li>Claim-risk ranking &gt; random baseline.</li>
-                <li>Readiness checklist accuracy &gt; 90%.</li>
-                <li>Reconciliation 100% deterministic.</li>
-                <li>Cross-tenant access: 0 unauthorized.</li>
-                <li>AI unsupported-assertion rate near-zero.</li>
-              </ul>
+              <CardContent className="pt-6">
+                <p className="font-bold">Pilot metrics (engineering targets)</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  <li>Bill-audit precision &gt; 80%.</li>
+                  <li>False-positive rate &lt; 20%.</li>
+                  <li>Doc extraction field accuracy &gt; 90%.</li>
+                  <li>Claim-risk ranking &gt; random baseline.</li>
+                  <li>Readiness checklist accuracy &gt; 90%.</li>
+                  <li>Reconciliation 100% deterministic.</li>
+                  <li>Cross-tenant access: 0 unauthorized.</li>
+                  <li>AI unsupported-assertion rate near-zero.</li>
+                </ul>
+              </CardContent>
             </Card>
           </div>
         </Section>
@@ -1084,30 +1044,36 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
         <Section id="roadmap" index="16" title="Roadmap, Packaging & Pilot" icon={LuRocket}>
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
-              <p className="font-extrabold">Roadmap</p>
-              <p className="mt-2 text-sm">
-                v1.1 payer configs · v1.5 multi-branch + forecasting · v2.0
-                ABDM/NHCX · v2.5 broader ops (pharmacy, OPD, beds) · v3.0 full
-                hospital OS. Protect revenue-cycle scope in MVP.
-              </p>
+              <CardContent className="pt-6">
+                <p className="font-bold">Roadmap</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  v1.1 payer configs · v1.5 multi-branch + forecasting · v2.0
+                  ABDM/NHCX · v2.5 broader ops (pharmacy, OPD, beds) · v3.0 full
+                  hospital OS. Protect revenue-cycle scope in MVP.
+                </p>
+              </CardContent>
             </Card>
-            <Card color="var(--tertiary)" className="!text-black">
-              <p className="font-extrabold">Commercial tiers</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>Core — workspace + billing + base analytics.</li>
-                <li>Professional — + Bill Auditor, Insurance, Discharge, Risk.</li>
-                <li>Enterprise — all 7 + integrations + security.</li>
-                <li>Add-ons — integrations, migration, custom payer rules.</li>
-              </ul>
+            <Card className="border-blue-500/30 bg-blue-500/10 dark:border-blue-400/30 dark:bg-blue-400/10">
+              <CardContent className="pt-6">
+                <p className="font-bold">Commercial tiers</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+                  <li>Core — workspace + billing + base analytics.</li>
+                  <li>Professional — + Bill Auditor, Insurance, Discharge, Risk.</li>
+                  <li>Enterprise — all 7 + integrations + security.</li>
+                  <li>Add-ons — integrations, migration, custom payer rules.</li>
+                </ul>
+              </CardContent>
             </Card>
-            <Card color="var(--secondary)" className="!text-black">
-              <p className="font-extrabold">Pilot</p>
-              <p className="mt-2 text-sm">
-                Private hospital w/ insurance/TPA activity, exportable HMIS,
-                willing reviewers, one branch. Mirror data; run all workflows;
-                measure time saved + leakage confirmed. Exit: weekly use + one
-                confirmed benefit + clean security review.
-              </p>
+            <Card className="border-green-500/30 bg-green-500/10 dark:border-green-400/30 dark:bg-green-400/10">
+              <CardContent className="pt-6">
+                <p className="font-bold">Pilot</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Private hospital w/ insurance/TPA activity, exportable HMIS,
+                  willing reviewers, one branch. Mirror data; run all workflows;
+                  measure time saved + leakage confirmed. Exit: weekly use + one
+                  confirmed benefit + clean security review.
+                </p>
+              </CardContent>
             </Card>
           </div>
         </Section>
@@ -1116,146 +1082,146 @@ Invoice Total - Patient Payment - Payer Settlement - Write-offs
         <Section id="ops" index="17" title="Repository, Runbooks & Risks" icon={LuWrench}>
           <div className="grid gap-4 md:grid-cols-3">
             <Card>
-              <p className="font-extrabold">Repo structure</p>
-              <p className="mt-2 font-mono text-xs">
-                apps/web · services/api, ai-gateway, document-intelligence,
-                claim-risk, billing-audit · packages/domain, schemas, firebase, ui,
-                config · functions/*-events, notifications · infra/firebase,
-                cloudrun · datasets/synthetic, ai-evals · docs/* · tests/*.
-              </p>
+              <CardContent className="pt-6">
+                <p className="font-bold">Repo structure</p>
+                <p className="mt-2 font-mono text-xs text-muted-foreground">
+                  apps/web · services/api, ai-gateway, document-intelligence,
+                  claim-risk, billing-audit · packages/domain, schemas, firebase, ui,
+                  config · functions/*-events, notifications · infra/firebase,
+                  cloudrun · datasets/synthetic, ai-evals · docs/* · tests/*.
+                </p>
+              </CardContent>
             </Card>
-            <Card color="var(--primary)">
-              <p className="font-extrabold">Runbooks (before pilot)</p>
-              <p className="mt-2 text-sm">
-                Onboard tenant · add branch/user · configure roles · configure
-                tariffs/payer rules · replay failed doc processing · inspect
-                failed risk job · disable AI module · handle cross-tenant
-                suspicion · revoke support · export/delete data · recover
-                deploy · rotate secrets.
-              </p>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="font-bold">Runbooks (before pilot)</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Onboard tenant · add branch/user · configure roles · configure
+                  tariffs/payer rules · replay failed doc processing · inspect
+                  failed risk job · disable AI module · handle cross-tenant
+                  suspicion · revoke support · export/delete data · recover
+                  deploy · rotate secrets.
+                </p>
+              </CardContent>
             </Card>
-            <Card color="var(--secondary)" className="!text-black">
-              <p className="font-extrabold">Top risks</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-                <li>Full ERP scope explosion.</li>
-                <li>Weak data model → AI amplifies.</li>
-                <li>Black-box AI → no hospital trust.</li>
-                <li>Poor tenant isolation → incident.</li>
-                <li>Overusing Firestore for analytics.</li>
-                <li>No hospital discovery.</li>
-                <li>Overfitting to one payer.</li>
-                <li>No integration strategy.</li>
-                <li>No measured ROI.</li>
-              </ul>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="font-bold">Top risks</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                  <li>Full ERP scope explosion.</li>
+                  <li>Weak data model → AI amplifies.</li>
+                  <li>Black-box AI → no hospital trust.</li>
+                  <li>Poor tenant isolation → incident.</li>
+                  <li>Overusing Firestore for analytics.</li>
+                  <li>No hospital discovery.</li>
+                  <li>Overfitting to one payer.</li>
+                  <li>No integration strategy.</li>
+                  <li>No measured ROI.</li>
+                </ul>
+              </CardContent>
             </Card>
           </div>
         </Section>
 
         {/* TEAM */}
         <Section id="team" index="18" title="Team Assignment & Ownership" icon={LuUserCog}>
-          <p className="mb-3 text-sm">
+          <p className="mb-3 text-sm text-muted-foreground">
             Every feature has one primary owner + at least one reviewer
             (coordinated via weekly HealthOS engineering review). Founders and
             Vighnesh M / Hamsini SY / Anya R are excluded per project instructions.
           </p>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border-2 border-ink text-left">
-              <tbody>
-                <Tr>
-                  <Td head>Person</Td>
-                  <Td head>HealthOS ownership</Td>
-                  <Td head>Primary responsibilities</Td>
-                </Tr>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Person</TableHead>
+                  <TableHead>HealthOS ownership</TableHead>
+                  <TableHead>Primary responsibilities</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {team.map(([a, b, c]) => (
-                  <Tr key={a}>
-                    <Td col className="font-bold">{a}</Td>
-                    <Td>{b}</Td>
-                    <Td className="text-sm">{c}</Td>
-                  </Tr>
+                  <TableRow key={a}>
+                    <TableCell className="font-medium">{a}</TableCell>
+                    <TableCell>{b}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{c}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         </Section>
 
-        {/* NEW: ADDITIONS */}
+        {/* ADDITIONS */}
         <Section id="add" index="19" title="Recommended Additions to the MVP" icon={LuLightbulb}>
-          <div className="neo-note p-5">
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="grid h-7 w-7 place-items-center border-2 border-ink bg-secondary text-white shadow-[2px_2px_0_0_var(--ink)]"
-              >
-                <LuPlus size={16} />
-              </span>
-              <span className="neo-tag" style={{ background: "var(--secondary)", color: "#fff" }}>
-                Addition
-              </span>
-              <span className="font-mono text-xs font-bold uppercase text-secondary">
-                does not change the MVP idea, modules or tech scope
-              </span>
-            </div>
-            <p className="text-sm">
-              The spec is strong. The items below are important for a real
-              hospital pilot and are <b>suggested as additions</b>, not
-              replacements of anything already planned:
-            </p>
-            <ul className="mt-3 space-y-3">
-              {additions.map(([a, b]) => (
-                <li key={a} className="flex gap-3 text-sm">
-                  <span
-                    aria-hidden="true"
-                    className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center border-2 border-ink bg-primary shadow-[2px_2px_0_0_var(--ink)]"
-                  >
-                    <LuLightbulb size={14} />
-                  </span>
-                  <span>
-                    <b>{a}.</b> {b}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Alert className="border-dashed">
+            <LuPlus className="h-4 w-4" />
+            <AlertTitle className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide">
+              <Badge variant="secondary">Addition</Badge>
+              does not change the MVP idea, modules or tech scope
+            </AlertTitle>
+            <AlertDescription className="mt-2 text-sm">
+              <p>
+                The spec is strong. The items below are important for a real
+                hospital pilot and are <b>suggested as additions</b>, not
+                replacements of anything already planned:
+              </p>
+              <ul className="mt-3 space-y-3">
+                {additions.map(([a, b]) => (
+                  <li key={a} className="flex gap-3 text-sm">
+                    <LuLightbulb className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span>
+                      <b>{a}.</b> {b}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </AlertDescription>
+          </Alert>
         </Section>
 
         {/* REFERENCES */}
         <Section id="refs" index="20" title="References & Final Instruction" icon={LuBookOpen}>
           <div className="grid gap-4 md:grid-cols-2">
             <Card>
-              <p className="font-extrabold">References used</p>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
-                <li>Zenera Labs — Home / Team / Portfolio</li>
-                <li>Firebase Terms of Service (May 2026)</li>
-                <li>Firebase — Secure data in Cloud Firestore (Aug 2026)</li>
-                <li>Firebase — Security Rules basics</li>
-                <li>Firebase — Cloud Firestore locations</li>
-                <li>Google Cloud — HIPAA compliance + BAA</li>
-              </ul>
+              <CardContent className="pt-6">
+                <p className="font-bold">References used</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
+                  <li>Zenera Labs — Home / Team / Portfolio</li>
+                  <li>Firebase Terms of Service (May 2026)</li>
+                  <li>Firebase — Secure data in Cloud Firestore (Aug 2026)</li>
+                  <li>Firebase — Security Rules basics</li>
+                  <li>Firebase — Cloud Firestore locations</li>
+                  <li>Google Cloud — HIPAA compliance + BAA</li>
+                </ul>
+              </CardContent>
             </Card>
-            <Card color="var(--primary)">
-              <p className="font-extrabold">Final instruction to the team</p>
-              <p className="mt-2 text-sm">
-                <b>Build the workflow, not the features.</b> A hospital should
-                open one encounter and move patient → charges → bill audit →
-                insurance readiness → discharge → claim risk → query/denial →
-                settlement → reconciliation → management insight without leaving
-                HealthOS. Lock contracts early, build thin vertical slices, test
-                with synthetic data, integrate continuously.
-              </p>
+            <Card>
+              <CardContent className="pt-6">
+                <p className="font-bold">Final instruction to the team</p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  <b>Build the workflow, not the features.</b> A hospital should
+                  open one encounter and move patient → charges → bill audit →
+                  insurance readiness → discharge → claim risk → query/denial →
+                  settlement → reconciliation → management insight without leaving
+                  HealthOS. Lock contracts early, build thin vertical slices, test
+                  with synthetic data, integrate continuously.
+                </p>
+              </CardContent>
             </Card>
           </div>
         </Section>
       </main>
 
-      <footer className="mt-8 border-t-4 border-ink bg-ink py-8 text-white">
+      <footer className="mt-8 border-t bg-secondary py-8 text-secondary-foreground">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 text-center">
-          <p className="text-xl font-extrabold">
-            ZENERA HEALTH<span className="text-secondary">OS</span>
+          <p className="text-xl font-bold">
+            ZENERA HEALTH<span className="text-muted-foreground">OS</span>
           </p>
-          <p className="font-mono text-xs text-white/70">
+          <p className="font-mono text-xs text-muted-foreground">
             One SaaS. Seven intelligence modules. One revenue-cycle workflow.
           </p>
-          <p className="font-mono text-[10px] text-white/50">
+          <p className="font-mono text-[10px] text-muted-foreground/70">
             Internal Product + Engineering Handoff · v2.0 · August 2026
           </p>
         </div>

@@ -5,6 +5,31 @@ import mermaid from "mermaid";
 
 let initialized = false;
 
+function getThemeVars() {
+  if (typeof document === "undefined") return null;
+  const isDark = document.documentElement.classList.contains("dark");
+  return {
+    primaryColor: isDark ? "#1e293b" : "#f3f4f6",
+    primaryBorderColor: isDark ? "#94a3b8" : "#000000",
+    primaryTextColor: isDark ? "#f1f5f9" : "#000000",
+    lineColor: isDark ? "#94a3b8" : "#000000",
+    secondaryColor: isDark ? "#334155" : "#e5e7eb",
+    secondaryBorderColor: isDark ? "#94a3b8" : "#000000",
+    secondaryTextColor: isDark ? "#f1f5f9" : "#000000",
+    tertiaryColor: isDark ? "#1e293b" : "#f9fafb",
+    tertiaryBorderColor: isDark ? "#94a3b8" : "#000000",
+    tertiaryTextColor: isDark ? "#f1f5f9" : "#000000",
+    background: isDark ? "#0a0a0a" : "#ffffff",
+    mainBkg: isDark ? "#0a0a0a" : "#ffffff",
+    nodeBorder: isDark ? "#94a3b8" : "#000000",
+    clusterBkg: isDark ? "#1e293b" : "#f9fafb",
+    clusterBorder: isDark ? "#94a3b8" : "#000000",
+    nodeTextColor: isDark ? "#f1f5f9" : "#000000",
+    edgeLabelBackground: isDark ? "#0a0a0a" : "#ffffff",
+    titleColor: isDark ? "#f1f5f9" : "#000000",
+  };
+}
+
 export default function Mermaid({
   chart,
   caption,
@@ -16,33 +41,17 @@ export default function Mermaid({
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    const vars = getThemeVars();
     if (!initialized) {
       mermaid.initialize({
         startOnLoad: false,
         theme: "base",
         securityLevel: "loose",
-        fontFamily: "var(--font-heading), sans-serif",
+        fontFamily: "var(--font-sans), sans-serif",
         themeVariables: {
-          fontFamily: "var(--font-heading), sans-serif",
+          ...vars,
+          fontFamily: "var(--font-sans), sans-serif",
           fontSize: "15px",
-          primaryColor: "#FFD23F",
-          primaryBorderColor: "#000000",
-          primaryTextColor: "#000000",
-          lineColor: "#000000",
-          secondaryColor: "#74B9FF",
-          secondaryBorderColor: "#000000",
-          secondaryTextColor: "#000000",
-          tertiaryColor: "#FF6B6B",
-          tertiaryBorderColor: "#000000",
-          tertiaryTextColor: "#000000",
-          background: "#fffdf5",
-          mainBkg: "#fffdf5",
-          nodeBorder: "#000000",
-          clusterBkg: "#ffffff",
-          clusterBorder: "#000000",
-          nodeTextColor: "#000000",
-          edgeLabelBackground: "#ffffff",
-          titleColor: "#000000",
         },
         flowchart: { curve: "linear", htmlLabels: true, padding: 14, nodeSpacing: 36, rankSpacing: 48 },
         sequence: { useMaxWidth: true },
@@ -70,14 +79,14 @@ export default function Mermaid({
 
   if (error) {
     return (
-      <pre className="neo-sm overflow-auto bg-white p-3 font-mono text-xs">
+      <pre className="overflow-auto rounded-lg border bg-background p-3 font-mono text-xs">
         {chart}
       </pre>
     );
   }
 
   return (
-    <figure className="mermaid-host" ref={ref} aria-label={caption ?? "Architecture diagram"}>
+    <figure className="mermaid-host" ref={ref} role="img" aria-label={caption ?? "Architecture diagram"}>
       <figcaption className="sr-only">{caption ?? "Architecture diagram"}</figcaption>
     </figure>
   );
