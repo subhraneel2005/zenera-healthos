@@ -324,6 +324,7 @@ export default function Home() {
             <a href="#security" className="hover:underline">Security</a>
             <a href="#timeline" className="hover:underline">Timeline</a>
             <a href="#add" className="hover:underline">Additions</a>
+            <a href="/team" className="neo-btn !px-3 !py-1 !text-xs">Team Map</a>
           </nav>
           <a href="#top" className="neo-btn !py-2 !text-sm">
             v2.0 Spec
