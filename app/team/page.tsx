@@ -473,7 +473,7 @@ function createPragnaCanvas(editor: Editor) {
     if (!task) return;
     const col = i % 3;
     const row = Math.floor(i / 3);
-    box(editor, 40 + col * S, P4 + HEADER + 20 + row * (T + 20), W, T, task.title, "light-yellow");
+    box(editor, 40 + col * S, P4 + HEADER + 20 + row * (T + 20), W, T, task.title, "yellow");
   });
 
   // ── PHASE 5: WEEK 15–16 ──
@@ -525,7 +525,7 @@ function createPragnaCanvas(editor: Editor) {
     "→ PRAGNA: Security gate blocks pilot sign-off",
   ];
   exts.forEach((t, i) => {
-    box(editor, EX, EY + HEADER + 20 + i * 38, 360, 30, t, "light-grey");
+    box(editor, EX, EY + HEADER + 20 + i * 38, 360, 30, t, "grey");
   });
 
   // Fit the whole diagram
