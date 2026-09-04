@@ -515,28 +515,26 @@ export default function TeamPage() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* LEFT SIDEBAR */}
-        <aside className="flex h-full min-h-0 w-[380px] shrink-0 flex-col border-r bg-card">
-          {/* Search */}
-          <div className="border-b px-3 py-2">
-            <div className="relative">
-              <LuIcons.LuSearch size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <input
-                ref={searchRef}
-                type="text"
-                placeholder="Search members... ( / )"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setSelected(0);
-                }}
-                className="w-full rounded-md border bg-background py-1.5 pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-              />
+        <aside className="flex h-full min-h-0 w-[340px] shrink-0 flex-col border-r bg-card">
+          {/* Search + Member Selector */}
+          <div className="flex min-h-0 flex-col border-b">
+            <div className="border-b px-3 py-2">
+              <div className="relative">
+                <LuIcons.LuSearch size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  ref={searchRef}
+                  type="text"
+                  placeholder="Search members... ( / )"
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setSelected(0);
+                  }}
+                  className="w-full rounded-md border bg-background py-1.5 pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
             </div>
-          </div>
-
-          {/* Member Selector */}
-          <div className="border-b">
-            <ScrollArea className="max-h-[280px]">
+            <ScrollArea className="max-h-[200px]">
               <div className="p-1.5">
                 {filteredMembers.length === 0 && (
                   <p className="px-3 py-4 text-center text-sm text-muted-foreground">No members match</p>
@@ -552,30 +550,30 @@ export default function TeamPage() {
                         setSelected(m.idx);
                         setSearch("");
                       }}
-                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                      className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                         m.idx === selected
                           ? "bg-accent font-semibold ring-1 ring-ring/30"
                           : "hover:bg-muted"
                       }`}
                     >
                       <div
-                        className="grid h-8 w-8 shrink-0 place-items-center rounded-md text-white"
+                        className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-white"
                         style={{ background: m.color }}
                       >
-                        <Icon size={14} />
+                        <Icon size={13} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium">{m.name}</p>
-                        <p className="truncate text-xs text-muted-foreground">{m.role}</p>
+                        <p className="truncate text-sm font-medium leading-tight">{m.name}</p>
+                        <p className="truncate text-[11px] text-muted-foreground">{m.role}</p>
                       </div>
-                      <div className="flex shrink-0 gap-1">
+                      <div className="flex shrink-0 gap-0.5">
                         {tc.critical > 0 && (
-                          <span className="grid h-5 min-w-5 place-items-center rounded-full bg-red-500/90 px-1.5 text-[10px] font-bold text-white">
+                          <span className="grid h-4 min-w-4 place-items-center rounded-full bg-red-500/90 px-1 text-[9px] font-bold text-white">
                             {tc.critical}
                           </span>
                         )}
                         {tc.high > 0 && (
-                          <span className="grid h-5 min-w-5 place-items-center rounded-full bg-orange-500/90 px-1.5 text-[10px] font-bold text-white">
+                          <span className="grid h-4 min-w-4 place-items-center rounded-full bg-orange-500/90 px-1 text-[9px] font-bold text-white">
                             {tc.high}
                           </span>
                         )}
@@ -587,52 +585,33 @@ export default function TeamPage() {
             </ScrollArea>
           </div>
 
-          {/* Member Details */}
-          <div className="border-b px-4 py-3">
-            <div className="flex items-center gap-3">
-              <div
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-white"
-                style={{ background: member.color }}
-              >
-                {(() => { const Icon = iconMap[member.iconName] ?? LuIcons.LuUser; return <Icon size={18} />; })()}
-              </div>
-              <div className="min-w-0">
-                <h2 className="text-base font-bold leading-tight">{member.name}</h2>
-                <p className="text-xs text-muted-foreground">{member.role}</p>
-              </div>
+          {/* Selected Member Info — compact one-liner */}
+          <div className="flex items-center gap-2 border-b px-4 py-2">
+            <div
+              className="grid h-6 w-6 shrink-0 place-items-center rounded text-white"
+              style={{ background: member.color }}
+            >
+              {(() => { const Icon = iconMap[member.iconName] ?? LuIcons.LuUser; return <Icon size={12} />; })()}
             </div>
-            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{member.ownership}</p>
-            {/* Task count summary */}
-            <div className="mt-2 flex gap-3 text-xs">
-              <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-red-500" />
-                <span className="text-muted-foreground">{taskCounts.critical} critical</span>
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-orange-500" />
-                <span className="text-muted-foreground">{taskCounts.high} high</span>
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-yellow-500" />
-                <span className="text-muted-foreground">{taskCounts.medium} med</span>
-              </span>
-            </div>
+            <span className="truncate text-sm font-semibold">{member.name}</span>
+            <span className="ml-auto flex gap-1.5 text-[10px] text-muted-foreground">
+              <span className="flex items-center gap-0.5"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />{taskCounts.critical}</span>
+              <span className="flex items-center gap-0.5"><span className="h-1.5 w-1.5 rounded-full bg-orange-500" />{taskCounts.high}</span>
+              <span className="flex items-center gap-0.5"><span className="h-1.5 w-1.5 rounded-full bg-yellow-500" />{taskCounts.medium}</span>
+            </span>
           </div>
 
-          {/* All Tasks */}
+          {/* Tasks — fills remaining space */}
           <ScrollArea className="min-h-0 flex-1">
             <div className="p-3">
               <div className="mb-2 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <LuIcons.LuFileText size={14} />
-                  <h3 className="text-sm font-semibold">Tasks ({filteredTasks.length})</h3>
-                </div>
-                <div className="flex gap-1">
+                <span className="text-xs font-semibold text-muted-foreground">Tasks ({filteredTasks.length})</span>
+                <div className="flex gap-0.5">
                   {(["all", "critical", "high", "medium"] as const).map((p) => (
                     <button
                       key={p}
                       onClick={() => setPriorityFilter(p)}
-                      className={`rounded-md px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                      className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors ${
                         priorityFilter === p
                           ? "bg-primary text-primary-foreground"
                           : "text-muted-foreground hover:bg-muted"
@@ -645,16 +624,16 @@ export default function TeamPage() {
               </div>
               <Accordion multiple className="space-y-1">
                 {filteredTasks.map((task) => (
-                  <AccordionItem key={task.id} value={task.id} className="rounded-lg border px-3">
-                    <AccordionTrigger className="py-2 text-left text-xs font-semibold hover:no-underline [&[data-state=open]>svg]:rotate-0">
-                      <div className="flex items-center gap-2">
+                  <AccordionItem key={task.id} value={task.id} className="rounded-md border px-2.5">
+                    <AccordionTrigger className="py-1.5 text-left text-xs font-semibold hover:no-underline [&[data-state=open]>svg]:rotate-0">
+                      <div className="flex items-center gap-1.5">
                         <PriorityBadge priority={task.priority} />
                         <span className="line-clamp-1">{task.title}</span>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="space-y-2 pb-3 pt-1 text-xs">
+                    <AccordionContent className="space-y-1.5 pb-2 pt-0.5 text-xs">
                       <p className="text-muted-foreground">{task.detail}</p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div className="flex flex-wrap gap-1">
                         <Badge variant="outline" className="text-[10px]">{task.when}</Badge>
                         <Badge variant="outline" className="text-[10px]">{task.deliverable}</Badge>
                       </div>
